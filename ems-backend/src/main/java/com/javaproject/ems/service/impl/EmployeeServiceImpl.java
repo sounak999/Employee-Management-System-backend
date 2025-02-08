@@ -6,12 +6,10 @@ import com.javaproject.ems.exception.ResourceNotFoundException;
 import com.javaproject.ems.mapper.EmployeeMapper;
 import com.javaproject.ems.repository.EmployeeRepository;
 import com.javaproject.ems.service.EmployeeService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,5 +54,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee savedEmployee = employeeRepository.save(employee);
 
         return EmployeeMapper.mapToEmployeeDto(savedEmployee);
+    }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+        employeeRepository.findById(employeeId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Employee does not exist with given employeeId: " + employeeId));
+
+        employeeRepository.deleteById(employeeId);
     }
 }
