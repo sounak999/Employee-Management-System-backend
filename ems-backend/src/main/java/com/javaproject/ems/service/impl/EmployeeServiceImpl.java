@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,5 +34,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                         new ResourceNotFoundException("Employee does not exist with given id: " + employeeId));
 
         return EmployeeMapper.mapToEmployeeDto(employee);
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployees() {
+        List<Employee> employeeList = employeeRepository.findAll();
+        return employeeList.stream()
+                .map((employee) -> EmployeeMapper.mapToEmployeeDto(employee))
+                .collect(Collectors.toList());
     }
 }
